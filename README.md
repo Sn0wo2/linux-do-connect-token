@@ -2,10 +2,11 @@
 
 A helper library to authenticate with connect.linux.do and retrieve auth.session-token
 
+---
+
 ## Usage
 
-### High-level helper
-
+### Get Sessions
 ```python
 import os
 from linux_do_connect import get_auth_session
@@ -19,6 +20,8 @@ session = get_auth_session(
 print(session.cookies.get("auth.session-token"))
 ```
 
+---
+
 ### Custom Session
 
 ```python
@@ -28,7 +31,6 @@ from linux_do_connect import LinuxDoConnect
 
 connect_cookie = os.getenv("_t")
 session = requests.Session()
-# Configure session...
 
 client = LinuxDoConnect(session)
 token = client.get_token(
@@ -38,3 +40,14 @@ token = client.get_token(
 )
 print(token)
 ```
+
+---
+
+## Get the `_t` Cookie
+
+1. Log in to [linux.do](https://linux.do)
+2. Open DevTools by pressing F12
+3. Go to the Application tab
+4. Expand Cookies in the left sidebar and select linux.do
+5. Find the `_t` cookie in the list
+6. Copy its value for later use
