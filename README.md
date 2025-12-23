@@ -7,13 +7,14 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 ## Usage
 
 ### Get Sessions
+
 ```python
 import os
 from linux_do_connect import get_auth_session
 
 connect_cookie = os.getenv("_t")
 session = get_auth_session(
-    connect_cookie, 
+    connect_cookie,
     timeout=30,
     proxies={"https": "http://127.0.0.1:7890"}
 )

@@ -15,7 +15,7 @@ class LinuxDoConnect:
             allow_redirects=False,
             **kwargs
         )
-        
+
         if r.status_code != HTTPStatus.FOUND:
             raise Exception("Cannot get redirect url from connect.linux.do")
 
@@ -29,12 +29,13 @@ class LinuxDoConnect:
             cookies={'_t': connect_cookie},
             **kwargs
         )
-        
+
         return self.session
 
     def get_token(self, connect_cookie: str, **kwargs) -> Optional[str]:
         self.login(connect_cookie, **kwargs)
         return self.session.cookies.get("auth.session-token")
+
 
 def get_auth_session(connect_cookie: str, session: Optional[requests.Session] = None, **kwargs) -> requests.Session:
     connector = LinuxDoConnect(session)
