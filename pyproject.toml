@@ -15,7 +15,8 @@ dependencies = [
 
 [tool.poetry]
 packages = [
-    { include = "linux_do_connect.py" }
+    { include = "linux_do_connect.py" },
+    { include = "__init__.py" }
 ]
 
 [build-system]

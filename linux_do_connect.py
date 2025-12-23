@@ -1,6 +1,8 @@
 from http import HTTPStatus
 from typing import Optional
+
 from curl_cffi import requests
+
 
 class LinuxDoConnect:
     def __init__(self, session: Optional[requests.Session] = None):
@@ -37,5 +39,3 @@ class LinuxDoConnect:
 def get_auth_session(connect_cookie: str, session: Optional[requests.Session] = None, **kwargs) -> requests.Session:
     connector = LinuxDoConnect(session)
     return connector.login(connect_cookie, **kwargs)
-
-__all__ = ["LinuxDoConnect", "get_auth_session"]
