@@ -3,40 +3,46 @@ from typing import Optional
 
 from curl_cffi import requests
 
+CONNECT_URL = "https://connect.linux.do"
+IMPERSONATE = "chrome"
+AUTH_COOKIE_KEY = "_t"
+SESSION_TOKEN_KEY = "auth.session-token"
 
 class LinuxDoConnect:
-    def __init__(self, session: Optional[requests.Session] = None):
-        self.session = session or requests.Session()
+    def __init__(self, session: Optional[requests.AsyncSession] = None):
+        self.session = session or requests.AsyncSession()
 
-    def login(self, connect_cookie: str, **kwargs) -> requests.Session:
-        r = self.session.get(
-            "https://connect.linux.do",
-            impersonate="chrome",
+    async def login(self, connect_cookie: str, **kwargs) -> requests.AsyncSession:
+
+        r = await self.session.get(
+            CONNECT_URL,
+            impersonate=IMPERSONATE,
             allow_redirects=False,
             **kwargs
         )
 
         if r.status_code != HTTPStatus.FOUND:
-            raise Exception("Cannot get redirect url from connect.linux.do")
+            raise Exception(f"Cannot get redirect url from {CONNECT_URL}")
 
         redirect_url = r.headers.get('Location')
         if not redirect_url:
             raise Exception("No Location header found in response")
 
-        self.session.get(
+        await self.session.get(
             redirect_url,
-            impersonate="chrome",
-            cookies={'_t': connect_cookie},
+            impersonate=IMPERSONATE,
+            cookies={AUTH_COOKIE_KEY: connect_cookie},
             **kwargs
         )
 
         return self.session
 
-    def get_token(self, connect_cookie: str, **kwargs) -> Optional[str]:
-        self.login(connect_cookie, **kwargs)
-        return self.session.cookies.get("auth.session-token")
+    async def get_token(self, connect_cookie: str, **kwargs) -> Optional[str]:
+        await self.login(connect_cookie, **kwargs)
+        return self.session.cookies.get(SESSION_TOKEN_KEY)
 
 
-def get_auth_session(connect_cookie: str, session: Optional[requests.Session] = None, **kwargs) -> requests.Session:
+async def get_auth_session(connect_cookie: str, session: Optional[requests.AsyncSession] = None,
+                           **kwargs) -> requests.AsyncSession:
     connector = LinuxDoConnect(session)
-    return connector.login(connect_cookie, **kwargs)
+    return await connector.login(connect_cookie, **kwargs)
