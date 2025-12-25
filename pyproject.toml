@@ -1,6 +1,5 @@
 [project]
 name = "linux-do-connect-token"
-version = "0.0.0"
 description = "A helper library to authenticate with connect.linux.do and retrieve auth.session-token"
 authors = [
     { name = "Sn0wo2" }
