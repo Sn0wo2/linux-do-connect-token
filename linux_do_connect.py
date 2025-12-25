@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 
 from curl_cffi import requests
@@ -28,3 +29,18 @@ class LinuxDoConnect:
 
     async def get_auth_token(self) -> tuple[str, str]:
         return self.session.cookies.get(SESSION_TOKEN_KEY), self.session.cookies.get(AUTH_COOKIE_KEY)
+
+    async def approve_oauth(self, oauth_url: str, **kwargs) -> str:
+        """
+        :param oauth_url:
+        :param kwargs:
+        :return: oauth callback url
+        """
+        options = {"impersonate": IMPERSONATE, "allow_redirects": False, **kwargs}
+        r = await self.session.get(oauth_url, **options)
+
+        if match := re.search(r'href\s*=\s*["\'](/oauth2/approve/[^"\']+)["\']', r.text):
+            r = await self.session.get(f"{CONNECT_URL}{match.group(1)}", **options)
+            return r.headers["Location"]
+
+        raise ValueError("Approve url not found")
