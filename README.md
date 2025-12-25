@@ -46,9 +46,11 @@ print(token)
 
 ## Get the `_t` Cookie
 
-1. Log in to [linux.do](https://linux.do)
-2. Open DevTools by pressing F12
-3. Go to the Application tab
-4. Expand Cookies in the left sidebar and select linux.do
-5. Find the `_t` cookie in the list
-6. Copy its value for later use
+1. Open InPrivate page(Because token refresh)
+2. Log in to [linux.do](https://linux.do)
+3. Open DevTools by pressing F12
+4. Go to the Application tab
+5. Expand Cookies in the left sidebar and select linux.do
+6. Find the `_t` cookie in the list
+7. Copy its value for later use
+8. Close InPrivate page(Dont logout linux.do)
