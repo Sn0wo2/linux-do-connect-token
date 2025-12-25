@@ -13,7 +13,6 @@ class LinuxDoConnect:
 
     async def login(self, connect_cookie: str, **kwargs) -> requests.AsyncSession:
         options = {"impersonate": IMPERSONATE, "allow_redirects": False, **kwargs}
-
         r = await self.session.get(CONNECT_URL, **options)
         r = await self.session.get(
             r.headers["Location"],
@@ -24,18 +23,6 @@ class LinuxDoConnect:
 
         return self.session
 
-    async def get_token(self, connect_cookie: str, **kwargs) -> Optional[str]:
-        await self.login(connect_cookie, **kwargs)
-        return self.session.cookies.get(SESSION_TOKEN_KEY)
 
-
-async def get_auth_session(connect_cookie: str, session: Optional[requests.AsyncSession] = None,
-                           **kwargs) -> requests.AsyncSession:
-    connector = LinuxDoConnect(session)
-    return await connector.login(connect_cookie, **kwargs)
-
-
-async def get_token(connect_cookie: str, session: Optional[requests.AsyncSession] = None,
-                    **kwargs) -> Optional[str]:
-    connector = LinuxDoConnect(session)
-    return await connector.get_token(connect_cookie, **kwargs)
+async def get_auth_token(session: requests.AsyncSession) -> tuple[str, str]:
+    return session.cookies.get(SESSION_TOKEN_KEY), session.cookies.get(AUTH_COOKIE_KEY)
