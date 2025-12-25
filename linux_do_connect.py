@@ -11,7 +11,7 @@ class LinuxDoConnect:
     def __init__(self, session: Optional[requests.AsyncSession] = None):
         self.session = session or requests.AsyncSession()
 
-    async def login(self, connect_cookie: str, **kwargs) -> requests.AsyncSession:
+    async def login(self, connect_cookie: str, **kwargs) -> "LinuxDoConnect":
         options = {"impersonate": IMPERSONATE, "allow_redirects": False, **kwargs}
         r = await self.session.get(CONNECT_URL, **options)
         r = await self.session.get(
@@ -21,8 +21,10 @@ class LinuxDoConnect:
         )
         await self.session.get(r.headers["Location"], **options)
 
+        return self
+
+    async def get_session(self) -> requests.AsyncSession:
         return self.session
 
-
-async def get_auth_token(session: requests.AsyncSession) -> tuple[str, str]:
-    return session.cookies.get(SESSION_TOKEN_KEY), session.cookies.get(AUTH_COOKIE_KEY)
+    async def get_auth_token(self) -> tuple[str, str]:
+        return self.session.cookies.get(SESSION_TOKEN_KEY), self.session.cookies.get(AUTH_COOKIE_KEY)

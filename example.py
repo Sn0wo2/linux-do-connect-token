@@ -1,13 +1,13 @@
 import asyncio
 import os
 
-from linux_do_connect import LinuxDoConnect, get_auth_token
+from linux_do_connect import LinuxDoConnect
 
 
 async def test_class_usage(connect_cookie, timeout):
     try:
         client = LinuxDoConnect()
-        auth_token, _t = await get_auth_token(await client.login(connect_cookie, timeout=timeout))
+        auth_token, _t = await (await client.login(connect_cookie, timeout=timeout)).get_auth_token()
         feedback = f"Token from class: {auth_token}"
         if _t is not None and connect_cookie != _t:
             feedback += f" (Mismatch in _t cookie:\n Before: {connect_cookie}\nNow: {_t})"
