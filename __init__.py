@@ -2,6 +2,6 @@
 
 __version__ = "0.0.0"
 
-from .linux_do_connect import LinuxDoConnect, get_auth_session
+from .linux_do_connect import LinuxDoConnect, get_auth_session, get_token
 
-__all__ = ["LinuxDoConnect", "get_auth_session"]
+__all__ = ["LinuxDoConnect", "get_auth_session", "get_token"]

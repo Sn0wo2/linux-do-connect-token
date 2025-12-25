@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Optional
 
 from curl_cffi import requests
@@ -13,27 +12,15 @@ class LinuxDoConnect:
         self.session = session or requests.AsyncSession()
 
     async def login(self, connect_cookie: str, **kwargs) -> requests.AsyncSession:
+        options = {"impersonate": IMPERSONATE, "allow_redirects": False, **kwargs}
 
+        r = await self.session.get(CONNECT_URL, **options)
         r = await self.session.get(
-            CONNECT_URL,
-            impersonate=IMPERSONATE,
-            allow_redirects=False,
-            **kwargs
-        )
-
-        if r.status_code != HTTPStatus.FOUND:
-            raise Exception(f"Cannot get redirect url from {CONNECT_URL}")
-
-        redirect_url = r.headers.get('Location')
-        if not redirect_url:
-            raise Exception("No Location header found in response")
-
-        await self.session.get(
-            redirect_url,
-            impersonate=IMPERSONATE,
+            r.headers["Location"],
             cookies={AUTH_COOKIE_KEY: connect_cookie},
-            **kwargs
+            **options,
         )
+        await self.session.get(r.headers["Location"], **options)
 
         return self.session
 
@@ -46,3 +33,9 @@ async def get_auth_session(connect_cookie: str, session: Optional[requests.Async
                            **kwargs) -> requests.AsyncSession:
     connector = LinuxDoConnect(session)
     return await connector.login(connect_cookie, **kwargs)
+
+
+async def get_token(connect_cookie: str, session: Optional[requests.AsyncSession] = None,
+                    **kwargs) -> Optional[str]:
+    connector = LinuxDoConnect(session)
+    return await connector.get_token(connect_cookie, **kwargs)
