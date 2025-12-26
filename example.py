@@ -6,19 +6,19 @@ from curl_cffi import requests
 from linux_do_connect import LinuxDoConnect, IMPERSONATE
 
 
-async def test_auth_token(connect_cookie, timeout):
+async def test_connect_token(token, timeout):
     try:
         client = LinuxDoConnect()
-        await client.login(connect_cookie, timeout=timeout)
-        auth_token, _t = await client.get_auth_token()
-        
-        feedback = f"Token from class: {auth_token}"
-        if _t is not None and connect_cookie != _t:
-            feedback += f" (Mismatch in _t cookie:\n Before: {connect_cookie}\nNow: {_t})"
+        await client.login(token, timeout=timeout)
+        connect_token, new_token = await client.get_auth_token()
+
+        feedback = f"Token: {connect_token}"
+        if new_token is not None and token != new_token:
+            feedback += f" (Mismatch in _t cookie:\n Before: {token}\nNow: {new_token})"
 
         return client, feedback
     except Exception as e:
-        return None, f"Class usage failed: {e}"
+        return None, f"Failed : {e}"
 
 
 async def test_oauth_callback(client, timeout):
@@ -39,9 +39,9 @@ async def test_oauth_callback(client, timeout):
 
 
 async def main():
-    connect_cookie = os.getenv("_t")
+    connect_cookie = os.getenv("LINUX_DO_TOKEN")
     if not connect_cookie:
-        print("Please set '_t' environment variable")
+        print("Please set 'LINUX_DO_TOKEN' environment variable")
         exit(1)
 
     timeout = 30
@@ -51,7 +51,7 @@ async def main():
     print("=" * 50 + "\n")
 
     print("[*] Testing Authentication...")
-    client, auth_feedback = await test_auth_token(connect_cookie, timeout)
+    client, auth_feedback = await test_connect_token(connect_cookie, timeout)
     print(auth_feedback)
     print("-" * 50)
 

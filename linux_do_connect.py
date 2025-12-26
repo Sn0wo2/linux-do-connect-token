@@ -6,7 +6,7 @@ from curl_cffi.requests import RequestParams
 
 CONNECT_URL = "https://connect.linux.do"
 IMPERSONATE = "chrome"
-LINUX_DO_TOKEN_KEY = "_t"
+TOKEN_KEY = "_t"
 CONNECT_KEY = "auth.session-token"
 
 class LinuxDoConnect:
@@ -24,7 +24,7 @@ class LinuxDoConnect:
         r = await self.session.get(CONNECT_URL, **options)
         r = await self.session.get(
             r.headers["Location"],
-            cookies={LINUX_DO_TOKEN_KEY: connect_cookie},
+            cookies={TOKEN_KEY: connect_cookie},
             **options,
         )
         await self.session.get(r.headers["Location"], **options)
@@ -35,7 +35,7 @@ class LinuxDoConnect:
         return self.session
 
     async def get_auth_token(self) -> tuple[str, str | None]:
-        return self.session.cookies.get(CONNECT_KEY), self.session.cookies.get(LINUX_DO_TOKEN_KEY)
+        return self.session.cookies.get(CONNECT_KEY), self.session.cookies.get(TOKEN_KEY)
 
     async def approve_oauth(self, oauth_url: str, **kwargs: Unpack[RequestParams]) -> str:
         """
