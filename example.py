@@ -10,7 +10,7 @@ async def test_connect_token(token, timeout):
     try:
         client = LinuxDoConnect()
         await client.login(token, timeout=timeout)
-        connect_token, new_token = await client.get_auth_token()
+        connect_token, new_token = await client.get_connect_token()
 
         feedback = f"Token: {connect_token}"
         if new_token is not None and token != new_token:

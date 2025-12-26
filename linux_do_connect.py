@@ -34,7 +34,7 @@ class LinuxDoConnect:
     async def get_session(self) -> requests.AsyncSession:
         return self.session
 
-    async def get_auth_token(self) -> tuple[str, str | None]:
+    async def get_connect_token(self) -> tuple[str, str | None]:
         return self.session.cookies.get(CONNECT_KEY), self.session.cookies.get(TOKEN_KEY)
 
     async def approve_oauth(self, oauth_url: str, **kwargs: Unpack[RequestParams]) -> str:
