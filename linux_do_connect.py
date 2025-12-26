@@ -1,23 +1,30 @@
 import re
-from typing import Optional
+from typing import Optional, Unpack
 
 from curl_cffi import requests
+from curl_cffi.requests import RequestParams
 
 CONNECT_URL = "https://connect.linux.do"
 IMPERSONATE = "chrome"
-AUTH_COOKIE_KEY = "_t"
-SESSION_TOKEN_KEY = "auth.session-token"
+LINUX_DO_TOKEN_KEY = "_t"
+CONNECT_KEY = "auth.session-token"
 
 class LinuxDoConnect:
-    def __init__(self, session: Optional[requests.AsyncSession] = None):
-        self.session = session or requests.AsyncSession()
+    def __init__(self, session: Optional[requests.AsyncSession] = requests.AsyncSession(),
+                 connect_url: Optional[str] = CONNECT_URL) -> None:
+        self.session = session
+        self.connect_url = connect_url
 
-    async def login(self, connect_cookie: str, **kwargs) -> "LinuxDoConnect":
-        options = {"impersonate": IMPERSONATE, "allow_redirects": False, **kwargs}
+    async def login(self, connect_cookie: str, **kwargs: Unpack[RequestParams]) -> "LinuxDoConnect":
+        options = RequestParams(
+            impersonate=IMPERSONATE,
+            allow_redirects=False,
+            **kwargs,
+        )
         r = await self.session.get(CONNECT_URL, **options)
         r = await self.session.get(
             r.headers["Location"],
-            cookies={AUTH_COOKIE_KEY: connect_cookie},
+            cookies={LINUX_DO_TOKEN_KEY: connect_cookie},
             **options,
         )
         await self.session.get(r.headers["Location"], **options)
@@ -27,16 +34,20 @@ class LinuxDoConnect:
     async def get_session(self) -> requests.AsyncSession:
         return self.session
 
-    async def get_auth_token(self) -> tuple[str, str]:
-        return self.session.cookies.get(SESSION_TOKEN_KEY), self.session.cookies.get(AUTH_COOKIE_KEY)
+    async def get_auth_token(self) -> tuple[str, str | None]:
+        return self.session.cookies.get(CONNECT_KEY), self.session.cookies.get(LINUX_DO_TOKEN_KEY)
 
-    async def approve_oauth(self, oauth_url: str, **kwargs) -> str:
+    async def approve_oauth(self, oauth_url: str, **kwargs: Unpack[RequestParams]) -> str:
         """
         :param oauth_url:
         :param kwargs:
         :return: oauth callback url
         """
-        options = {"impersonate": IMPERSONATE, "allow_redirects": False, **kwargs}
+        options = RequestParams(
+            impersonate=IMPERSONATE,
+            allow_redirects=False,
+            **kwargs,
+        )
         r = await self.session.get(oauth_url, **options)
 
         if match := re.search(r'href\s*=\s*["\'](/oauth2/approve/[^"\']+)["\']', r.text):
