@@ -4,43 +4,17 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 
 ---
 
-## Usage
+[![GitHub release](https://img.shields.io/github/v/release/Sn0wo2/CatSync?color=blue)](https://github.com/Sn0wo2/CatSync/releases)
 
-### Get Sessions
-
-```python
-import os
-from linux_do_connect import get_auth_session
-
-connect_cookie = os.getenv("_t")
-session = get_auth_session(
-    connect_cookie,
-    timeout=30,
-    proxies={"https": "http://127.0.0.1:7890"}
-)
-print(session.cookies.get("auth.session-token"))
-```
+[![Python CI](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/py.yml/badge.svg)](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/py.yml)
+[![Release](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/release.yml/badge.svg)](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/release.yml)
+[![CodeQL Advanced](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/codeql.yml/badge.svg)](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/codeql.yml)
 
 ---
 
-### Custom Session
+## Usage
 
-```python
-import os
-from curl_cffi import requests
-from linux_do_connect import LinuxDoConnect
-
-connect_cookie = os.getenv("_t")
-session = requests.Session()
-
-client = LinuxDoConnect(session)
-token = client.get_token(
-    connect_cookie,
-    timeout=30,
-    proxies={"https": "http://127.0.0.1:7890"}
-)
-print(token)
-```
+> See example
 
 ---
 
@@ -54,3 +28,8 @@ print(token)
 6. Find the `_t` cookie in the list
 7. Copy its value for later use
 8. Close InPrivate page(Dont logout linux.do)
+
+---
+
+请自行维护 Token 的生命周期。当 `get_auth_token` 返回的第二个参数不为 `None` 时，表示 **Token 已刷新**，请及时更新保存的
+Token 值。
