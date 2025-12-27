@@ -35,6 +35,9 @@ class LinuxDoConnect:
         return self.session
 
     async def get_connect_token(self) -> tuple[str, str | None]:
+        """
+        请自行维护 Token 的生命周期。当返回的第二个参数不为 None 时，表示 Token 已刷新，请及时更新保存的 Token 值。
+        """
         return self.session.cookies.get(CONNECT_KEY), self.session.cookies.get(TOKEN_KEY)
 
     async def approve_oauth(self, oauth_url: str, **kwargs: Unpack[RequestParams]) -> str:
