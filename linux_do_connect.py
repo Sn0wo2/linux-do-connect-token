@@ -16,11 +16,11 @@ class LinuxDoConnect:
         self.connect_url = connect_url
 
     async def login(self, connect_cookie: str, **kwargs: Unpack[RequestParams]) -> "LinuxDoConnect":
-        options = RequestParams(
-            impersonate=IMPERSONATE,
-            allow_redirects=False,
+        options = {
+            "impersonate": IMPERSONATE,
+            "allow_redirects": False,
             **kwargs,
-        )
+        }
         r = await self.session.get(CONNECT_URL, **options)
         r = await self.session.get(
             r.headers["Location"],
@@ -43,11 +43,11 @@ class LinuxDoConnect:
         :param kwargs:
         :return: oauth callback url
         """
-        options = RequestParams(
-            impersonate=IMPERSONATE,
-            allow_redirects=False,
+        options = {
+            "impersonate": IMPERSONATE,
+            "allow_redirects": False,
             **kwargs,
-        )
+        }
         r = await self.session.get(oauth_url, **options)
 
         if match := re.search(r'href\s*=\s*["\'](/oauth2/approve/[^"\']+)["\']', r.text):
