@@ -18,7 +18,7 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 
 ---
 
-## Get the `_t` Cookie
+## Get `LINUX_DO_TOKEN(_t)`
 
 1. Open InPrivate page(Because token refresh)
 2. Log in to [linux.do](https://linux.do)
@@ -31,5 +31,5 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 
 ---
 
-请自行维护 Token 的生命周期。当 `get_auth_token` 返回的第二个参数不为 `None` 时，表示 **Token 已刷新**，请及时更新保存的
+请自行维护 Token 的生命周期。当 `get_connect_token` 返回的第二个参数不为 `None` 时，表示 **Token 已刷新**，请及时更新保存的
 Token 值。
