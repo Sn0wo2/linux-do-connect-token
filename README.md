@@ -4,11 +4,11 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 
 ---
 
-[![GitHub release](https://img.shields.io/github/v/release/Sn0wo2/linux-do-connect-token?color=blue)](https://github.com/Sn0wo2/linux-do-connect-token/releases)
-
 [![Python CI](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/py.yml/badge.svg)](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/py.yml)
 [![Release](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/release.yml/badge.svg)](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/release.yml)
 [![CodeQL Advanced](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/codeql.yml/badge.svg)](https://github.com/Sn0wo2/linux-do-connect-token/actions/workflows/codeql.yml)
+
+[![GitHub release](https://img.shields.io/github/v/release/Sn0wo2/linux-do-connect-token?color=blue)](https://github.com/Sn0wo2/linux-do-connect-token/releases)
 
 ---
 
