@@ -12,6 +12,10 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 
 ---
 
+> [!] 项目当前正在开发, **不保证`v0`的向后兼容性**, 如果要在生产环境使用请等待`v1`发布
+
+---
+
 ## Usage
 
 > See example
@@ -28,8 +32,3 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 6. Find the `_t` cookie in the list
 7. Copy its value for later use
 8. Close InPrivate page(Dont logout linux.do)
-
----
-
-请自行维护 Token 的生命周期。当 `get_connect_token` 返回的第二个参数不等于输入 Token 时，表示 **Token 已刷新**，请及时更新保存的
-Token 值。
