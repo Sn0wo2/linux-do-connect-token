@@ -8,8 +8,8 @@ from linux_do_connect import LinuxDoConnect, IMPERSONATE
 
 async def test_connect_token(token, timeout):
     try:
-        client = LinuxDoConnect()
-        await client.login(token, timeout=timeout)
+        client = LinuxDoConnect(token)
+        await client.login(timeout=timeout)
         connect_token, new_token = await client.get_connect_token()
 
         feedback = f"Token: {connect_token}"
@@ -39,8 +39,8 @@ async def test_oauth_callback(client, timeout):
 
 
 async def main():
-    connect_cookie = os.getenv("LINUX_DO_TOKEN")
-    if not connect_cookie:
+    connect_token = os.getenv("LINUX_DO_TOKEN")
+    if not connect_token:
         print("Please set 'LINUX_DO_TOKEN' environment variable")
         exit(1)
 
@@ -51,7 +51,7 @@ async def main():
     print("=" * 50 + "\n")
 
     print("[*] Testing Authentication...")
-    client, auth_feedback = await test_connect_token(connect_cookie, timeout)
+    client, auth_feedback = await test_connect_token(connect_token, timeout)
     print(auth_feedback)
     print("-" * 50)
 
