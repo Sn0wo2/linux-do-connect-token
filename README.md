@@ -12,6 +12,10 @@ A helper library to authenticate with connect.linux.do and retrieve auth.session
 
 ---
 
+> 由于26年2月connecct.linux.do更新了页面所以此项目暂时不可用。
+
+---
+
 > [!] 项目当前正在开发, **不保证`v0`的向后兼容性**, 如果要在生产环境使用请等待`v1`发布
 
 ---
