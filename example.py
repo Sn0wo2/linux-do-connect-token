@@ -1,5 +1,6 @@
 import asyncio
 import os
+import traceback
 
 from curl_cffi import requests
 
@@ -18,7 +19,7 @@ async def test_connect_token(token, timeout):
 
         return client, feedback
     except Exception as e:
-        return None, f"Failed : {e}"
+        return None, f"Failed : {e}\n{traceback.format_exc()}"
 
 
 async def test_oauth_callback(client, timeout):
@@ -28,14 +29,17 @@ async def test_oauth_callback(client, timeout):
     try:
         async with requests.AsyncSession() as session:
             # 薄荷的恩情还不完 ✋😭✋
-            r = await session.get("https://qd.x666.me/api/auth/login", impersonate=IMPERSONATE)
-            oauth_url = r.json()["authUrl"]
+            r = await session.get("https://up.x666.me/api/auth/login", impersonate=IMPERSONATE)
+            data = r.json()
+            oauth_url = data.get("auth_url")
+            if not oauth_url:
+                return f"OAuth usage failed: 'auth_url' not found in response: {r.text}"
 
         call_back_url = await client.approve_oauth(oauth_url, timeout=timeout)
 
         return f"Callback URL: {call_back_url}"
     except Exception as e:
-        return f"OAuth usage failed: {e}"
+        return f"OAuth usage failed: {e}\n{traceback.format_exc()}"
 
 
 async def main():
