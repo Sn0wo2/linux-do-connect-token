@@ -11,6 +11,7 @@ IMPERSONATE: BrowserTypeLiteral = "chrome"
 TOKEN_KEY = "_t"
 CONNECT_KEY = "auth.session-token"
 
+
 class LinuxDoConnect:
     def __init__(self, token: str = "",
                  session: Optional[requests.AsyncSession] = None,
@@ -58,7 +59,7 @@ class LinuxDoConnect:
         """
         if "impersonate" not in kwargs:
             kwargs["impersonate"] = IMPERSONATE
-        
+
         r = await self.session.get(oauth_url, **kwargs)
 
         if match := re.search(r'href\s*=\s*["\'](/oauth2/approve/[^"\']+)["\']', r.text):
