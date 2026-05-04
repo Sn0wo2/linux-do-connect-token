@@ -21,7 +21,7 @@ class LinuxDoConnect:
         self.session = session or requests.AsyncSession()
         self.connect_url = connect_url
         self.base_url = base_url
-        self.impersonate = impersonate
+        self.impersonate = impersonate or IMPERSONATE
         self.base_domain = urlparse(base_url).hostname
         self.base_connect_domain = urlparse(connect_url).hostname
 
